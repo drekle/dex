@@ -350,7 +350,6 @@ func (c *oidcConnector) GetUserInfo(connData []byte, user *map[string]interface{
 	authorization := fmt.Sprintf("bearer %s", cData.AccessToken)
 	// Prepare get request including Authorization header from RP
 	req, err := http.NewRequest("GET", c.userInfoURI, nil)
-
 	if err != nil {
 		return fmt.Errorf("Error Creating GET request: %v", err)
 	}
