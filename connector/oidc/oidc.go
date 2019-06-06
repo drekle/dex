@@ -366,7 +366,10 @@ func (c *oidcConnector) GetUserInfo(connData []byte, user *map[string]interface{
 		return fmt.Errorf("Error Executing GET request: %v", err)
 	}
 
-	json.NewDecoder(resp.Body).Decode(user)
+	err = json.NewDecoder(resp.Body).Decode(user)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -376,7 +379,6 @@ func (c *oidcConnector) getGroups(claims map[string]interface{}) (groups []strin
 	if rawGroup, ok := claims[c.groupsKey]; ok {
 		if groupList, ok := rawGroup.([]interface{}); ok {
 			for _, group := range groupList {
-				//CN=cxp_calo_users,OU=Grouper,OU=Groups,O=cco.cisco.com
 				monikers := strings.Split(group.(string), ",")
 				for _, moniker := range monikers {
 					monikerkv := strings.Split(moniker, "=")
